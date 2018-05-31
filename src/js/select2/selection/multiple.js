@@ -23,6 +23,7 @@ define([
 
   MultipleSelection.prototype.bind = function (container, $container) {
     var self = this;
+    var label = this.options.get('label');
 
     MultipleSelection.__super__.bind.apply(this, arguments);
 

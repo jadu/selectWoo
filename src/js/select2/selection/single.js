@@ -31,6 +31,12 @@ define([
     SingleSelection.__super__.bind.apply(this, arguments);
 
     var id = container.id + '-container';
+    var label = this.options.get('label');
+
+    // If a label is passed via options, set aria label on select2-container for screen readers
+    if (label) {
+      this.container.$container.attr('aria-label', label);
+    }
 
     this.$selection.find('.select2-selection__rendered')
       .attr('id', id)
