@@ -109,15 +109,15 @@ module.exports = function (grunt) {
       }
     },
 
-    // connect: {
-    //   tests: {
-    //     options: {
-    //       base: '.',
-    //       hostname: '127.0.0.1',
-    //       port: 9999
-    //     }
-    //   }
-    // },
+    connect: {
+      tests: {
+        options: {
+          base: '.',
+          hostname: '127.0.0.1',
+          port: 9999
+        }
+      }
+    },
 
     uglify: {
       'dist': {
@@ -150,57 +150,57 @@ module.exports = function (grunt) {
       }
     },
 
-    // qunit: {
-    //   all: {
-    //     options: {
-    //       urls: testUrls
-    //     }
-    //   }
-    // },
+    qunit: {
+      all: {
+        options: {
+          urls: testUrls
+        }
+      }
+    },
 
-    // 'saucelabs-qunit': {
-    //   all: {
-    //     options: {
-    //       build: testBuildNumber,
-    //       tags: ['tests', 'qunit'],
-    //       urls: testUrls,
-    //       testname: 'QUnit test for Select2',
-    //       browsers: [
-    //         {
-    //           browserName: 'internet explorer',
-    //           version: '8'
-    //         },
-    //         {
-    //           browserName: 'internet explorer',
-    //           version: '9'
-    //         },
-    //         {
-    //           browserName: 'internet explorer',
-    //           version: '10'
-    //         },
-    //         {
-    //           browserName: 'internet explorer',
-    //           version: '11'
-    //         },
+    'saucelabs-qunit': {
+      all: {
+        options: {
+          build: testBuildNumber,
+          tags: ['tests', 'qunit'],
+          urls: testUrls,
+          testname: 'QUnit test for Select2',
+          browsers: [
+            {
+              browserName: 'internet explorer',
+              version: '8'
+            },
+            {
+              browserName: 'internet explorer',
+              version: '9'
+            },
+            {
+              browserName: 'internet explorer',
+              version: '10'
+            },
+            {
+              browserName: 'internet explorer',
+              version: '11'
+            },
 
-    //         {
-    //           browserName: 'firefox',
-    //           platform: 'linux'
-    //         },
+            {
+              browserName: 'firefox',
+              platform: 'linux'
+            },
 
-    //         {
-    //           browserName: 'chrome'
-    //         },
+            {
+              browserName: 'chrome'
+            },
 
-    //         {
-    //           browserName: 'opera',
-    //           version: '12',
-    //           platform: 'linux'
-    //         }
-    //       ]
-    //     }
-    //   }
-    // },
+            {
+              browserName: 'opera',
+              version: '12',
+              platform: 'linux'
+            }
+          ]
+        }
+      }
+    },
 
     'gh-pages': {
       options: {
@@ -420,8 +420,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-saucelabs');
   grunt.loadNpmTasks('grunt-sass');
 
-  //grunt.registerTask('default', ['compile', 'test', 'minify']);
-  grunt.registerTask('default', ['compile', 'minify', 'watch']);
+  grunt.registerTask('default', ['compile', 'test', 'minify', 'watch']);
 
   grunt.registerTask('compile', [
     'requirejs:dist', 'requirejs:dist.woo', 'requirejs:dist.full', 'requirejs:dist.full.woo', 'requirejs:i18n',
@@ -429,20 +428,20 @@ module.exports = function (grunt) {
     'sass:dev'
   ]);
   grunt.registerTask('minify', ['uglify', 'sass:dist']);
-  //grunt.registerTask('test', ['connect:tests', 'qunit', 'jshint']);
+  grunt.registerTask('test', ['connect:tests', 'qunit', 'jshint']);
 
   var ciTasks = [];
 
   ciTasks.push('compile')
-  //ciTasks.push('connect:tests');
+  ciTasks.push('connect:tests');
 
   // Can't run Sauce Labs tests in pull requests
-  // if (process.env.TRAVIS_PULL_REQUEST == 'false') {
-  //   ciTasks.push('saucelabs-qunit');
-  // }
+  if (process.env.TRAVIS_PULL_REQUEST == 'false') {
+    ciTasks.push('saucelabs-qunit');
+  }
 
-  // ciTasks.push('qunit');
-  // ciTasks.push('jshint');
+  ciTasks.push('qunit');
+  ciTasks.push('jshint');
 
   grunt.registerTask('ci', ciTasks);
 
