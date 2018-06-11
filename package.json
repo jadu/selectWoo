@@ -69,6 +69,7 @@
     "jquery-mousewheel": "~3.1.13"
   },
   "scripts": {
-    "start": "browser-sync start --server 'playground' --ss 'dist' 'vendor'"
+    "start": "browser-sync start --server 'playground' --ss 'dist' 'vendor'",
+    "test": "grunt test"
   }
 }
