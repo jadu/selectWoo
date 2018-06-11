@@ -423,8 +423,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-saucelabs');
   grunt.loadNpmTasks('grunt-sass');
 
-  //grunt.registerTask('default', ['compile', 'test', 'minify']);
-  grunt.registerTask('default', ['compile', 'minify', 'watch']);
+  grunt.registerTask('default', ['compile', 'test', 'minify', 'watch']);
 
   grunt.registerTask('compile', [
     'requirejs:dist', 'requirejs:dist.woo', 'requirejs:dist.full', 'requirejs:dist.full.woo', 'requirejs:i18n',

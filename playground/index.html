@@ -8,8 +8,45 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.select2').select2({
-                //'label': 'This is a label passed via options'
+            $('.select2').select2();
+
+            $('.select2-ajax').select2({
+                ajax: {
+                  url: "https://reqres.in/api/users?page=2",
+                  dataType: "json",
+                  delay: 250,
+                  processResults: function(data) {
+                    // Map results to what select2 expects
+                    var data = $.map(data.data, function(obj) {
+                      obj.text = obj.text || obj.first_name + ' ' + obj.last_name;
+                      return obj;
+                    });
+
+                    return {
+                      results: data
+                    };
+                  }
+                }
+            });
+
+            $('.select2-ajax-min-entry').select2({
+                minimumInputLength: 2,
+                ajax: {
+                  url: "https://reqres.in/api/users?page=2",
+                  dataType: "json",
+                  delay: 250,
+                  processResults: function(data) {
+                    // Map results to what select2 expects
+                    var data = $.map(data.data, function(obj) {
+                      obj.text = obj.text || obj.first_name + ' ' + obj.last_name;
+                      return obj;
+                    });
+
+                    return {
+                      results: data
+                    };
+                  }
+                }
             });
         });
     </script>
@@ -49,6 +86,24 @@
     </select>
 
     <h3>Single selection with ajax</h3>
+    <label for="example-3">Select users</label>
+    <select class="select2-ajax" id="example-3" name="example-3" data-label="Select users" data-placeholder="Please choose"></select>
+
+
     <h3>Multiple selection with ajax</h3>
+    <label for="example-4">Select users</label>
+    <select class="select2-ajax" id="example-4" name="example-4" data-label="Select users" data-placeholder="Please choose" multiple></select>
+
+    <h3>Multiple selection with ajax and minimum entry</h3>
+    <label for="example-5">Select users</label>
+    <select class="select2-ajax-min-entry" id="example-5" name="example-5" data-label="Select users" data-placeholder="Please choose" multiple></select>
+
+    <h3>Confirmed options.label is read correctly when field focused in: </h3>
+    <ul>
+        <li>NVDA 2018.1.1 (IE11)</li>
+        <li>JAWS 18 (IE11)</li>
+        <li>JAWS 2018 (IE11)</li>
+        <li>Mac VoiceOver (Chrome/Safari)</li>
+    </ul>
 </body>
 </html>
