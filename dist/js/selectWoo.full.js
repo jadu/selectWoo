@@ -1931,6 +1931,7 @@ S2.define('select2/selection/search',[
     var label = this.options.get('label');
     var ariaLabelAttr = '';
 
+    // If a label is passed via options, set aria label on multiple select search for screen readers
     if (label) {
       ariaLabelAttr = 'aria-label ="' + label + '"';
     }
