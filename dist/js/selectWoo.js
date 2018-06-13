@@ -1,5 +1,5 @@
 /*!
- * SelectWoo 1.0.1
+ * SelectWoo (JADU) 1.0.1
  * https://github.com/woocommerce/selectWoo
  *
  * Released under the MIT license
@@ -35,7 +35,8 @@
   // This is needed so we can catch the AMD loader configuration and use it
   // The inner file should be wrapped (by `banner.start.js`) in a function that
   // returns the AMD loader references.
-  var S2 =(function () {
+  var S2 =
+(function () {
   // Restore the Select2 AMD loader so it can be used
   // Needed mostly in the language files, where the loader is not inserted
   if (jQuery && jQuery.fn && jQuery.fn.select2 && jQuery.fn.select2.amd) {
