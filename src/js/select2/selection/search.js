@@ -41,7 +41,8 @@ define([
     decorated.call(this, container, $container);
 
     container.on('open', function () {
-      self.$search.attr('aria-owns', resultsId);
+      // DEBUG - This kills IE11 on Win 7
+      // self.$search.attr('aria-owns', resultsId);
       self.$search.trigger('focus');
     });
 
