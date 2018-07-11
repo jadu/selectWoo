@@ -6515,8 +6515,6 @@ S2.define('jquery.select2',[
   './select2/core',
   './select2/defaults'
 ], function ($, _, Select2, Defaults) {
-  confirm('UPDATE!');
-
   if ($.fn.selectWoo == null) {
     // All methods that should return the element
     var thisMethods = ['open', 'close', 'destroy'];
