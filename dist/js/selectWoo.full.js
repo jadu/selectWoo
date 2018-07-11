@@ -1411,8 +1411,6 @@ S2.define('select2/selection/base',[
     container.on('open', function () {
       // When the dropdown is open, aria-expanded="true"
       self.$selection.attr('aria-expanded', 'true');
-      self.$selection.attr('aria-owns', resultsId);
-
       self._attachCloseHandler(container);
     });
 
@@ -1420,7 +1418,6 @@ S2.define('select2/selection/base',[
       // When the dropdown is closed, aria-expanded="false"
       self.$selection.attr('aria-expanded', 'false');
       self.$selection.removeAttr('aria-activedescendant');
-      self.$selection.removeAttr('aria-owns');
 
       // This needs to be delayed as the active element is the body when the
       // key is pressed.
@@ -1962,15 +1959,12 @@ S2.define('select2/selection/search',[
     decorated.call(this, container, $container);
 
     container.on('open', function () {
-      // DEBUG - This kills IE11 on Win 7
-      // self.$search.attr('aria-owns', resultsId);
       self.$search.trigger('focus');
     });
 
     container.on('close', function () {
       self.$search.val('');
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.trigger('focus');
     });
 
@@ -4048,7 +4042,6 @@ S2.define('select2/dropdown/search',[
 
     container.on('open', function () {
       self.$search.attr('tabindex', 0);
-      self.$search.attr('aria-owns', resultsId);
       self.$search.focus();
 
       window.setTimeout(function () {
@@ -4059,7 +4052,6 @@ S2.define('select2/dropdown/search',[
     container.on('close', function () {
       self.$search.attr('tabindex', -1);
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.val('');
     });
 
@@ -6523,6 +6515,8 @@ S2.define('jquery.select2',[
   './select2/core',
   './select2/defaults'
 ], function ($, _, Select2, Defaults) {
+  confirm('UPDATE!');
+
   if ($.fn.selectWoo == null) {
     // All methods that should return the element
     var thisMethods = ['open', 'close', 'destroy'];

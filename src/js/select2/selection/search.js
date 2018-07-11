@@ -41,15 +41,12 @@ define([
     decorated.call(this, container, $container);
 
     container.on('open', function () {
-      // DEBUG - This kills IE11 on Win 7
-      // self.$search.attr('aria-owns', resultsId);
       self.$search.trigger('focus');
     });
 
     container.on('close', function () {
       self.$search.val('');
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.trigger('focus');
     });
 

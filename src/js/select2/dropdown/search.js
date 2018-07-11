@@ -49,7 +49,6 @@ define([
 
     container.on('open', function () {
       self.$search.attr('tabindex', 0);
-      self.$search.attr('aria-owns', resultsId);
       self.$search.focus();
 
       window.setTimeout(function () {
@@ -60,7 +59,6 @@ define([
     container.on('close', function () {
       self.$search.attr('tabindex', -1);
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.val('');
     });
 
