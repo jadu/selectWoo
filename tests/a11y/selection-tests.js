@@ -54,12 +54,6 @@ test('static aria attributes are present', function (assert) {
   var $selection = selection.render();
 
   assert.equal(
-    $selection.attr('role'),
-    'combobox',
-    'The container should identify as a combobox'
-  );
-
-  assert.equal(
     $selection.attr('aria-haspopup'),
     'true',
     'The dropdown is considered a popup of the container'
