@@ -11,7 +11,8 @@ define([
     var label = this.options.get('label');
     var ariaLabelAttr = '';
 
-    // If a label is passed via options, set aria label on multiple select search for screen readers
+    // If a label is passed via options,
+    // set aria label on multiple select search for screen readers
     if (label) {
       ariaLabelAttr = 'aria-label ="' + label + '"';
     }
@@ -20,7 +21,8 @@ define([
       '<li class="select2-search select2-search--inline">' +
         '<input class="select2-search__field" type="text" tabindex="-1"' +
         ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
-        ' spellcheck="false" role="textbox" aria-autocomplete="list" ' + ariaLabelAttr + '/>' +
+        ' spellcheck="false" role="textbox" aria-autocomplete="list" ' +
+        ariaLabelAttr + '/>' +
       '</li>'
     );
 

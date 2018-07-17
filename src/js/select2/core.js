@@ -379,7 +379,8 @@ define([
   };
 
   Select2.prototype.focusOnActiveElement = function () {
-    // Don't mess with the focus on touchscreens because it causes havoc with on-screen keyboards.
+    // Don't mess with the focus on touchscreens
+    // because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
       this.$results.find('li.select2-results__option--highlighted').focus();
     }

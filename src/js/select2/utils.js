@@ -278,7 +278,7 @@ define([
       Utils._isTouchscreenCache = 'ontouchstart' in document.documentElement;
     }
     return Utils._isTouchscreenCache;
-  }
+  };
 
   return Utils;
 });
