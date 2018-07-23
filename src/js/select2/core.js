@@ -295,7 +295,7 @@ define([
     });
 
     this.on('query', function (params) {
-      if (!self.isOpen()) {
+      if (!self.isOpen() && !self.isDisabled()) {
         self.trigger('open', {});
       }
 
@@ -326,7 +326,12 @@ define([
 
     $(document).on('keydown', function (evt) {
       var key = evt.which;
-      if (self.isOpen()) {
+
+      if (self.isDisabled()) {
+        return;
+      }
+      
+      if (self.isOpen()) {      
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
           self.close();
@@ -509,13 +514,17 @@ define([
     return this.$container.hasClass('select2-container--open');
   };
 
+  Select2.prototype.isDisabled = function () {
+    return this.$container.hasClass('select2-container--disabled');
+  };
+
   Select2.prototype.hasFocus = function () {
     return this.$container.hasClass('select2-container--focus');
   };
 
   Select2.prototype.focus = function (data) {
     // No need to re-trigger focus events if we are already focused
-    if (this.hasFocus()) {
+    if (this.hasFocus() || this.isDisabled()) {
       return;
     }
 
