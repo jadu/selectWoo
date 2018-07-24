@@ -145,4 +145,18 @@ test('aria-labelledby should match the rendered container', function (assert) {
   );
 });
 
+test('aria-role should be set', function (assert) {
+  var $select = $('#qunit-fixture .single');
+  var selection = new SingleSelection($select, options);
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  selection.bind(container, $('<span></span>'));
+
+  assert.equal($selection.attr('role'),
+    'combobox',
+    'The container should identify as a combobox'
+  );
+});
+
 module('Accessibility - Multiple');
