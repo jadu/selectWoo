@@ -1554,6 +1554,11 @@ S2.define('select2/selection/single',[
       .attr('aria-readonly', 'true');
     this.$selection.attr('aria-labelledby', id);
 
+    // If element is disabled, add aria-disabled to rendered element for screen readers
+    if (this.container.$element.attr('disabled')) {
+      this.$selection.find('.select2-selection__rendered').attr('aria-disabled', 'true');
+    }
+
     // This makes single non-search selects work in screen readers.
     // If it causes problems elsewhere, remove.
     this.$selection.attr('role', 'combobox');
@@ -5457,7 +5462,7 @@ S2.define('select2/core',[
     });
 
     this.on('query', function (params) {
-      if (!self.isOpen()) {
+      if (!self.isOpen() && !self.isDisabled()) {
         self.trigger('open', {});
       }
 
@@ -5488,7 +5493,12 @@ S2.define('select2/core',[
 
     $(document).on('keydown', function (evt) {
       var key = evt.which;
-      if (self.isOpen()) {
+
+      if (self.isDisabled()) {
+        return;
+      }
+      
+      if (self.isOpen()) {      
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
           self.close();
@@ -5671,13 +5681,17 @@ S2.define('select2/core',[
     return this.$container.hasClass('select2-container--open');
   };
 
+  Select2.prototype.isDisabled = function () {
+    return this.$container.hasClass('select2-container--disabled');
+  };
+
   Select2.prototype.hasFocus = function () {
     return this.$container.hasClass('select2-container--focus');
   };
 
   Select2.prototype.focus = function (data) {
     // No need to re-trigger focus events if we are already focused
-    if (this.hasFocus()) {
+    if (this.hasFocus() || this.isDisabled()) {
       return;
     }
 

@@ -45,6 +45,13 @@ define([
       .attr('aria-readonly', 'true');
     this.$selection.attr('aria-labelledby', id);
 
+    // If element is disabled, 
+    // add aria-disabled to rendered element for screen readers
+    if (this.container.$element.attr('disabled')) {
+      this.$selection.find('.select2-selection__rendered')
+        .attr('aria-disabled', 'true');
+    }
+
     // This makes single non-search selects work in screen readers.
     // If it causes problems elsewhere, remove.
     this.$selection.attr('role', 'combobox');

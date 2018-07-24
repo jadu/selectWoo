@@ -77,9 +77,26 @@
         <option value="bbq">BBQ</option>
     </select>
 
+    <h3>Single selection (Disabled)</h3>
+    <label for="example-1-disabled">Pick your sauce</label>
+    <select class="select2" id="example-1-disabled" name="example-1-disabled" data-placeholder="Please choose" data-label="Pick your sauce" disabled="disabled">
+        <option></option>
+        <option value="ketchup">Ketchup</option>
+        <option value="hot">Hot</option>
+        <option value="bbq">BBQ</option>
+    </select>
+
     <h3>Multiple selection</h3>
     <label for="example-2">Select users</label>
     <select class="select2" id="example-2" name="example-2" data-label="Select users" data-placeholder="Please choose one or more" multiple>
+        <option value="bob">Bob</option>
+        <option value="sally">Sally</option>
+        <option value="fred">Fred</option>
+    </select>
+
+    <h3>Multiple selection (Disabled)</h3>
+    <label for="example-2-disabled">Select users</label>
+    <select class="select2" id="example-2-disabled" name="example-2-disabled" data-label="Select users" data-placeholder="Please choose one or more" multiple disabled="disabled">
         <option value="bob">Bob</option>
         <option value="sally">Sally</option>
         <option value="fred">Fred</option>
@@ -89,14 +106,25 @@
     <label for="example-3">Select users</label>
     <select class="select2-ajax" id="example-3" name="example-3" data-label="Select users" data-placeholder="Please choose"></select>
 
+    <h3>Single selection with ajax (Disabled)</h3>
+    <label for="example-3-disabled">Select users</label>
+    <select class="select2-ajax" id="example-3-disabled" name="example-3-disabled" data-label="Select users" data-placeholder="Please choose" disabled="disabled"></select>
 
     <h3>Multiple selection with ajax</h3>
     <label for="example-4">Select users</label>
     <select class="select2-ajax" id="example-4" name="example-4" data-label="Select users" data-placeholder="Please choose" multiple></select>
 
+    <h3>Multiple selection with ajax (Disabled)</h3>
+    <label for="example-4-disabled">Select users</label>
+    <select class="select2-ajax" id="example-4-disabled" name="example-4-disabled" data-label="Select users" data-placeholder="Please choose" multiple disabled="disabled"></select>
+
     <h3>Multiple selection with ajax and minimum entry</h3>
     <label for="example-5">Select users</label>
     <select class="select2-ajax-min-entry" id="example-5" name="example-5" data-label="Select users" data-placeholder="Please choose" multiple></select>
+
+    <h3>Multiple selection with ajax and minimum entry (Disabled)</h3>
+    <label for="example-5-disabled">Select users</label>
+    <select class="select2-ajax-min-entry" id="example-5-disabled" name="example-5-disabled" data-label="Select users" data-placeholder="Please choose" multiple disabled="disabled"></select>
 
     <h3>Confirmed options.label is read correctly when field focused in: </h3>
     <ul>
