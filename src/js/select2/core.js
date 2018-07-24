@@ -330,8 +330,8 @@ define([
       if (self.isDisabled()) {
         return;
       }
-      
-      if (self.isOpen()) {      
+
+      if (self.isOpen()) {
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
           self.close();
@@ -523,7 +523,8 @@ define([
   };
 
   Select2.prototype.focus = function (data) {
-    // No need to re-trigger focus events if we are already focused
+    // No need to re-trigger focus events if we are already focused,
+    // we will prevent focus if the instance is disabled
     if (this.hasFocus() || this.isDisabled()) {
       return;
     }
