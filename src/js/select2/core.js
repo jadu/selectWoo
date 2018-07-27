@@ -295,7 +295,7 @@ define([
     });
 
     this.on('query', function (params) {
-      if (!self.isOpen()) {
+      if (!self.isOpen() && !self.isDisabled()) {
         self.trigger('open', {});
       }
 
@@ -326,6 +326,11 @@ define([
 
     $(document).on('keydown', function (evt) {
       var key = evt.which;
+
+      if (self.isDisabled()) {
+        return;
+      }
+
       if (self.isOpen()) {
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
@@ -379,7 +384,8 @@ define([
   };
 
   Select2.prototype.focusOnActiveElement = function () {
-    // Don't mess with the focus on touchscreens because it causes havoc with on-screen keyboards.
+    // Don't mess with the focus on touchscreens
+    // because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
       this.$results.find('li.select2-results__option--highlighted').focus();
     }
@@ -508,13 +514,18 @@ define([
     return this.$container.hasClass('select2-container--open');
   };
 
+  Select2.prototype.isDisabled = function () {
+    return this.$container.hasClass('select2-container--disabled');
+  };
+
   Select2.prototype.hasFocus = function () {
     return this.$container.hasClass('select2-container--focus');
   };
 
   Select2.prototype.focus = function (data) {
-    // No need to re-trigger focus events if we are already focused
-    if (this.hasFocus()) {
+    // No need to re-trigger focus events if we are already focused,
+    // we will prevent focus if the instance is disabled
+    if (this.hasFocus() || this.isDisabled()) {
       return;
     }
 

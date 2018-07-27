@@ -31,6 +31,13 @@ define([
     SingleSelection.__super__.bind.apply(this, arguments);
 
     var id = container.id + '-container';
+    var label = this.options.get('label');
+
+    // If a label is passed via options,
+    // set aria label on select2-container for screen readers
+    if (label) {
+      this.container.$container.attr('aria-label', label);
+    }
 
     this.$selection.find('.select2-selection__rendered')
       .attr('id', id)
@@ -38,7 +45,15 @@ define([
       .attr('aria-readonly', 'true');
     this.$selection.attr('aria-labelledby', id);
 
-    // This makes single non-search selects work in screen readers. If it causes problems elsewhere, remove.
+    // If element is disabled, 
+    // add aria-disabled to rendered element for screen readers
+    if (this.container.$element.attr('disabled')) {
+      this.$selection.find('.select2-selection__rendered')
+        .attr('aria-disabled', 'true');
+    }
+
+    // This makes single non-search selects work in screen readers.
+    // If it causes problems elsewhere, remove.
     this.$selection.attr('role', 'combobox');
 
     this.$selection.on('mousedown', function (evt) {
@@ -57,7 +72,8 @@ define([
     });
 
     this.$selection.on('keydown', function (evt) {
-      // If user starts typing an alphanumeric key on the keyboard, open if not opened.
+      // If user starts typing an alphanumeric key on the keyboard,
+      // open if not opened.
       if (!container.isOpen() && evt.which >= 48 && evt.which <= 90) {
         container.open();
       }

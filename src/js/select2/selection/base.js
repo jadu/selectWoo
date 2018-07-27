@@ -71,8 +71,6 @@ define([
     container.on('open', function () {
       // When the dropdown is open, aria-expanded="true"
       self.$selection.attr('aria-expanded', 'true');
-      self.$selection.attr('aria-owns', resultsId);
-
       self._attachCloseHandler(container);
     });
 
@@ -80,7 +78,6 @@ define([
       // When the dropdown is closed, aria-expanded="false"
       self.$selection.attr('aria-expanded', 'false');
       self.$selection.removeAttr('aria-activedescendant');
-      self.$selection.removeAttr('aria-owns');
 
       // This needs to be delayed as the active element is the body when the
       // key is pressed.
@@ -138,8 +135,9 @@ define([
         var $element = $this.data('element');
         $element.select2('close');
 
-        // Remove any focus when dropdown is closed by clicking outside the select area.
-        // Timeout of 1 required for close to finish wrapping up.
+        // Remove any focus when dropdown is closed by
+        // clicking outside the select area. Timeout of
+        // 1 required for close to finish wrapping up.
         setTimeout(function(){
          $this.find('*:focus').blur();
          $target.focus();

@@ -48,7 +48,18 @@
       </select>
     </div>
 
-    <script src="vendor/qunit-1.23.1.js" type="text/javascript"></script>
+    <script src="vendor/qunit-2.6.1.js" type="text/javascript"></script>
+
+    <script>
+      QUnit.start();
+
+      var module = QUnit.module,
+          test = QUnit.test;
+    </script>
+
+    <!-- Manually adding this here as grunt-qunit will attempt to inject it before qunit -->
+    <script src="../node_modules/grunt-contrib-qunit/phantomjs/bridge.js"></script>
+
     <script src="vendor/jquery-1.7.2.js" type="text/javascript"></script>
     <script src="../dist/js/select2.full.js" type="text/javascript"></script>
 

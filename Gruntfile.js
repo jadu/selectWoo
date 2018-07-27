@@ -153,7 +153,10 @@ module.exports = function (grunt) {
     qunit: {
       all: {
         options: {
-          urls: testUrls
+          urls: testUrls,
+          // overriding this as we are manually adding the QUnit PhantomJS bridge
+          // to ensure it is added at the right point
+          inject: null
         }
       }
     },
@@ -232,7 +235,8 @@ module.exports = function (grunt) {
 
     jshint: {
       options: {
-        jshintrc: true
+        jshintrc: true,
+        reporterOutput: ''
       },
       code: {
         src: ['src/js/**/*.js']
@@ -401,9 +405,10 @@ module.exports = function (grunt) {
           'minify'
         ]
       }
-    }
+    },
   });
 
+  grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-connect');
@@ -419,7 +424,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-saucelabs');
   grunt.loadNpmTasks('grunt-sass');
 
-  grunt.registerTask('default', ['compile', 'test', 'minify']);
+  grunt.registerTask('default', ['compile', 'test', 'minify', 'watch']);
 
   grunt.registerTask('compile', [
     'requirejs:dist', 'requirejs:dist.woo', 'requirejs:dist.full', 'requirejs:dist.full.woo', 'requirejs:i18n',

@@ -27,7 +27,7 @@ define([
     var id = '';
 
     if (container != null) {
-      id += container.id
+      id += container.id;
     } else {
       id += Utils.generateChars(4);
     }

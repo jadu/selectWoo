@@ -1,5 +1,5 @@
 /*!
- * SelectWoo <%= package.version %>
+ * SelectWoo (JADU) <%= package.version %>
  * https://github.com/woocommerce/selectWoo
  *
  * Released under the MIT license

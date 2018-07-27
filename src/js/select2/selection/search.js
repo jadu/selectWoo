@@ -8,11 +8,21 @@ define([
   }
 
   Search.prototype.render = function (decorated) {
+    var label = this.options.get('label');
+    var ariaLabelAttr = '';
+
+    // If a label is passed via options,
+    // set aria label on multiple select search for screen readers
+    if (label) {
+      ariaLabelAttr = 'aria-label ="' + label + '"';
+    }
+
     var $search = $(
       '<li class="select2-search select2-search--inline">' +
         '<input class="select2-search__field" type="text" tabindex="-1"' +
         ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
-        ' spellcheck="false" role="textbox" aria-autocomplete="list" />' +
+        ' spellcheck="false" role="textbox" aria-autocomplete="list" ' +
+        ariaLabelAttr + '/>' +
       '</li>'
     );
 
@@ -33,14 +43,12 @@ define([
     decorated.call(this, container, $container);
 
     container.on('open', function () {
-      self.$search.attr('aria-owns', resultsId);
       self.$search.trigger('focus');
     });
 
     container.on('close', function () {
       self.$search.val('');
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.trigger('focus');
     });
 

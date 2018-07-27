@@ -1,5 +1,5 @@
 /*!
- * SelectWoo 1.0.1
+ * SelectWoo (JADU) 1.0.1
  * https://github.com/woocommerce/selectWoo
  *
  * Released under the MIT license
@@ -35,7 +35,8 @@
   // This is needed so we can catch the AMD loader configuration and use it
   // The inner file should be wrapped (by `banner.start.js`) in a function that
   // returns the AMD loader references.
-  var S2 =(function () {
+  var S2 =
+(function () {
   // Restore the Select2 AMD loader so it can be used
   // Needed mostly in the language files, where the loader is not inserted
   if (jQuery && jQuery.fn && jQuery.fn.select2 && jQuery.fn.select2.amd) {
@@ -778,7 +779,7 @@ S2.define('select2/utils',[
       Utils._isTouchscreenCache = 'ontouchstart' in document.documentElement;
     }
     return Utils._isTouchscreenCache;
-  }
+  };
 
   return Utils;
 });
@@ -1184,7 +1185,8 @@ S2.define('select2/results',[
     });
 
     container.on('results:focus', function (params) {
-      params.element.addClass('select2-results__option--highlighted').attr('aria-selected', 'true');
+      params.element.addClass('select2-results__option--highlighted')
+        .attr('aria-selected', 'true');
       self.$results.attr('aria-activedescendant', params.element.attr('id'));
     });
 
@@ -1410,8 +1412,6 @@ S2.define('select2/selection/base',[
     container.on('open', function () {
       // When the dropdown is open, aria-expanded="true"
       self.$selection.attr('aria-expanded', 'true');
-      self.$selection.attr('aria-owns', resultsId);
-
       self._attachCloseHandler(container);
     });
 
@@ -1419,7 +1419,6 @@ S2.define('select2/selection/base',[
       // When the dropdown is closed, aria-expanded="false"
       self.$selection.attr('aria-expanded', 'false');
       self.$selection.removeAttr('aria-activedescendant');
-      self.$selection.removeAttr('aria-owns');
 
       // This needs to be delayed as the active element is the body when the
       // key is pressed.
@@ -1477,8 +1476,9 @@ S2.define('select2/selection/base',[
         var $element = $this.data('element');
         $element.select2('close');
 
-        // Remove any focus when dropdown is closed by clicking outside the select area.
-        // Timeout of 1 required for close to finish wrapping up.
+        // Remove any focus when dropdown is closed by
+        // clicking outside the select area. Timeout of
+        // 1 required for close to finish wrapping up.
         setTimeout(function(){
          $this.find('*:focus').blur();
          $target.focus();
@@ -1540,6 +1540,13 @@ S2.define('select2/selection/single',[
     SingleSelection.__super__.bind.apply(this, arguments);
 
     var id = container.id + '-container';
+    var label = this.options.get('label');
+
+    // If a label is passed via options,
+    // set aria label on select2-container for screen readers
+    if (label) {
+      this.container.$container.attr('aria-label', label);
+    }
 
     this.$selection.find('.select2-selection__rendered')
       .attr('id', id)
@@ -1547,7 +1554,13 @@ S2.define('select2/selection/single',[
       .attr('aria-readonly', 'true');
     this.$selection.attr('aria-labelledby', id);
 
-    // This makes single non-search selects work in screen readers. If it causes problems elsewhere, remove.
+    // If element is disabled, add aria-disabled to rendered element for screen readers
+    if (this.container.$element.attr('disabled')) {
+      this.$selection.find('.select2-selection__rendered').attr('aria-disabled', 'true');
+    }
+
+    // This makes single non-search selects work in screen readers.
+    // If it causes problems elsewhere, remove.
     this.$selection.attr('role', 'combobox');
 
     this.$selection.on('mousedown', function (evt) {
@@ -1566,7 +1579,8 @@ S2.define('select2/selection/single',[
     });
 
     this.$selection.on('keydown', function (evt) {
-      // If user starts typing an alphanumeric key on the keyboard, open if not opened.
+      // If user starts typing an alphanumeric key on the keyboard,
+      // open if not opened.
       if (!container.isOpen() && evt.which >= 48 && evt.which <= 90) {
         container.open();
       }
@@ -1637,7 +1651,10 @@ S2.define('select2/selection/multiple',[
     $selection.addClass('select2-selection--multiple');
 
     $selection.html(
-      '<ul class="select2-selection__rendered" aria-live="polite" aria-relevant="additions removals" aria-atomic="true"></ul>'
+      '<ul class="select2-selection__rendered" ' +
+      'aria-live="polite" ' +
+      'aria-relevant="additions removals" ' +
+      'aria-atomic="true"></ul>'
     );
 
     return $selection;
@@ -1645,6 +1662,7 @@ S2.define('select2/selection/multiple',[
 
   MultipleSelection.prototype.bind = function (container, $container) {
     var self = this;
+    var label = this.options.get('label');
 
     MultipleSelection.__super__.bind.apply(this, arguments);
 
@@ -1676,13 +1694,15 @@ S2.define('select2/selection/multiple',[
     );
 
     this.$selection.on('keydown', function (evt) {
-      // If user starts typing an alphanumeric key on the keyboard, open if not opened.
+      // If user starts typing an alphanumeric key on the keyboard,
+      // open if not opened.
       if (!container.isOpen() && evt.which >= 48 && evt.which <= 90) {
         container.open();
       }
     });
 
-    // Focus on the search field when the container is focused instead of the main container.
+    // Focus on the search field when the container
+    // is focused instead of the main container.
     container.on( 'focus', function(){
       self.focusOnSearch();
     });
@@ -1702,7 +1722,9 @@ S2.define('select2/selection/multiple',[
   MultipleSelection.prototype.selectionContainer = function () {
     var $container = $(
       '<li class="select2-selection__choice">' +
-        '<span class="select2-selection__choice__remove" role="presentation" aria-hidden="true">' +
+        '<span class="select2-selection__choice__remove" ' +
+        'role="presentation" ' +
+        'aria-hidden="true">' +
           '&times;' +
         '</span>' +
       '</li>'
@@ -1727,7 +1749,7 @@ S2.define('select2/selection/multiple',[
         self.$search.focus();
       }, 1);
     }
-  }
+  };
 
   MultipleSelection.prototype.update = function (data) {
     this.clear();
@@ -1921,11 +1943,21 @@ S2.define('select2/selection/search',[
   }
 
   Search.prototype.render = function (decorated) {
+    var label = this.options.get('label');
+    var ariaLabelAttr = '';
+
+    // If a label is passed via options,
+    // set aria label on multiple select search for screen readers
+    if (label) {
+      ariaLabelAttr = 'aria-label ="' + label + '"';
+    }
+
     var $search = $(
       '<li class="select2-search select2-search--inline">' +
         '<input class="select2-search__field" type="text" tabindex="-1"' +
         ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
-        ' spellcheck="false" role="textbox" aria-autocomplete="list" />' +
+        ' spellcheck="false" role="textbox" aria-autocomplete="list" ' +
+        ariaLabelAttr + '/>' +
       '</li>'
     );
 
@@ -1946,14 +1978,12 @@ S2.define('select2/selection/search',[
     decorated.call(this, container, $container);
 
     container.on('open', function () {
-      self.$search.attr('aria-owns', resultsId);
       self.$search.trigger('focus');
     });
 
     container.on('close', function () {
       self.$search.val('');
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.trigger('focus');
     });
 
@@ -3100,7 +3130,7 @@ S2.define('select2/data/base',[
     var id = '';
 
     if (container != null) {
-      id += container.id
+      id += container.id;
     } else {
       id += Utils.generateChars(4);
     }
@@ -3570,7 +3600,7 @@ S2.define('select2/data/ajax',[
       }, function () {
         // Attempt to detect if a request was aborted
         // Only works if the transport exposes a status property
-        if ($request.status && $request.status === '0') {
+        if ('status' in $request && $request.status === 0) {
           return;
         }
 
@@ -3993,7 +4023,8 @@ S2.define('select2/dropdown/search',[
       '<span class="select2-search select2-search--dropdown">' +
         '<input class="select2-search__field" type="text" tabindex="-1"' +
         ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
-        ' spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="true" />' +
+        ' spellcheck="false" role="combobox" aria-autocomplete="list" ' +
+        'aria-expanded="true" />' +
       '</span>'
     );
 
@@ -4031,7 +4062,6 @@ S2.define('select2/dropdown/search',[
 
     container.on('open', function () {
       self.$search.attr('tabindex', 0);
-      self.$search.attr('aria-owns', resultsId);
       self.$search.focus();
 
       window.setTimeout(function () {
@@ -4042,7 +4072,6 @@ S2.define('select2/dropdown/search',[
     container.on('close', function () {
       self.$search.attr('tabindex', -1);
       self.$search.removeAttr('aria-activedescendant');
-      self.$search.removeAttr('aria-owns');
       self.$search.val('');
     });
 
@@ -5433,7 +5462,7 @@ S2.define('select2/core',[
     });
 
     this.on('query', function (params) {
-      if (!self.isOpen()) {
+      if (!self.isOpen() && !self.isDisabled()) {
         self.trigger('open', {});
       }
 
@@ -5464,7 +5493,12 @@ S2.define('select2/core',[
 
     $(document).on('keydown', function (evt) {
       var key = evt.which;
-      if (self.isOpen()) {
+
+      if (self.isDisabled()) {
+        return;
+      }
+      
+      if (self.isOpen()) {      
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
           self.close();
@@ -5517,7 +5551,8 @@ S2.define('select2/core',[
   };
 
   Select2.prototype.focusOnActiveElement = function () {
-    // Don't mess with the focus on touchscreens because it causes havoc with on-screen keyboards.
+    // Don't mess with the focus on touchscreens
+    // because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
       this.$results.find('li.select2-results__option--highlighted').focus();
     }
@@ -5646,13 +5681,17 @@ S2.define('select2/core',[
     return this.$container.hasClass('select2-container--open');
   };
 
+  Select2.prototype.isDisabled = function () {
+    return this.$container.hasClass('select2-container--disabled');
+  };
+
   Select2.prototype.hasFocus = function () {
     return this.$container.hasClass('select2-container--focus');
   };
 
   Select2.prototype.focus = function (data) {
     // No need to re-trigger focus events if we are already focused
-    if (this.hasFocus()) {
+    if (this.hasFocus() || this.isDisabled()) {
       return;
     }
 

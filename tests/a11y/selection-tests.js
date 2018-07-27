@@ -54,12 +54,6 @@ test('static aria attributes are present', function (assert) {
   var $selection = selection.render();
 
   assert.equal(
-    $selection.attr('role'),
-    'combobox',
-    'The container should identify as a combobox'
-  );
-
-  assert.equal(
     $selection.attr('aria-haspopup'),
     'true',
     'The dropdown is considered a popup of the container'
@@ -148,6 +142,20 @@ test('aria-labelledby should match the rendered container', function (assert) {
     $selection.attr('aria-labelledby'),
     $rendered.attr('id'),
     'The rendered selection should label the container'
+  );
+});
+
+test('aria-role should be set', function (assert) {
+  var $select = $('#qunit-fixture .single');
+  var selection = new SingleSelection($select, options);
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  selection.bind(container, $('<span></span>'));
+
+  assert.equal($selection.attr('role'),
+    'combobox',
+    'The container should identify as a combobox'
   );
 });
 

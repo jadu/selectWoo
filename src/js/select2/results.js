@@ -399,7 +399,8 @@ define([
     });
 
     container.on('results:focus', function (params) {
-      params.element.addClass('select2-results__option--highlighted').attr('aria-selected', 'true');
+      params.element.addClass('select2-results__option--highlighted')
+        .attr('aria-selected', 'true');
       self.$results.attr('aria-activedescendant', params.element.attr('id'));
     });
 

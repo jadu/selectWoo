@@ -15,7 +15,10 @@ define([
     $selection.addClass('select2-selection--multiple');
 
     $selection.html(
-      '<ul class="select2-selection__rendered" aria-live="polite" aria-relevant="additions removals" aria-atomic="true"></ul>'
+      '<ul class="select2-selection__rendered" ' +
+      'aria-live="polite" ' +
+      'aria-relevant="additions removals" ' +
+      'aria-atomic="true"></ul>'
     );
 
     return $selection;
@@ -23,6 +26,7 @@ define([
 
   MultipleSelection.prototype.bind = function (container, $container) {
     var self = this;
+    var label = this.options.get('label');
 
     MultipleSelection.__super__.bind.apply(this, arguments);
 
@@ -54,13 +58,15 @@ define([
     );
 
     this.$selection.on('keydown', function (evt) {
-      // If user starts typing an alphanumeric key on the keyboard, open if not opened.
+      // If user starts typing an alphanumeric key on the keyboard,
+      // open if not opened.
       if (!container.isOpen() && evt.which >= 48 && evt.which <= 90) {
         container.open();
       }
     });
 
-    // Focus on the search field when the container is focused instead of the main container.
+    // Focus on the search field when the container
+    // is focused instead of the main container.
     container.on( 'focus', function(){
       self.focusOnSearch();
     });
@@ -80,7 +86,9 @@ define([
   MultipleSelection.prototype.selectionContainer = function () {
     var $container = $(
       '<li class="select2-selection__choice">' +
-        '<span class="select2-selection__choice__remove" role="presentation" aria-hidden="true">' +
+        '<span class="select2-selection__choice__remove" ' +
+        'role="presentation" ' +
+        'aria-hidden="true">' +
           '&times;' +
         '</span>' +
       '</li>'
@@ -105,7 +113,7 @@ define([
         self.$search.focus();
       }, 1);
     }
-  }
+  };
 
   MultipleSelection.prototype.update = function (data) {
     this.clear();
