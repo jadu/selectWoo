@@ -5,14 +5,13 @@ define([
     decorated.call(this, $element, options);
   }
 
-  A11ySingle.prototype.update = function (decorated, data) {
-    console.log("SINGLE UPDATE!", data)
+  A11ySingle.prototype.bind = function (decorated, data) {
+    console.log("SINGLE BIND!", data)
 
     // If orginal select had aria-describedby, add to select2-selection
     if (this.$element.attr('aria-describedby') != null) {
       this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
-    // the above isn't working for single selects with no placeholder...
 
     return decorated.call(this, data);
   };

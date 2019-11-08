@@ -28,17 +28,20 @@ define([
 
     MultipleSelection.__super__.bind.apply(this, arguments);
 
+    // console.log(container);
+    // console.log($container);
+
     // Add a container for our accessible selection summary
-    var selectionSummaryId = container.id + '-summary';
-    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
-    $container.append(this.$selectionSummary);
+    // var selectionSummaryId = container.id + '-summary';
+    // this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
+    // $container.append(this.$selectionSummary);
 
-    // If orginal select had aria-describedby, add to select2 search
-    if (this.$element.attr('aria-describedby') != null) {
-      this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
+    // // If orginal select had aria-describedby, add to select2 search
+    // if (this.$element.attr('aria-describedby') != null) {
+    //   this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
 
-      // need to deal with things alrady selected on load
-    }
+    //   // need to deal with things alrady selected on load
+    // }
 
     this.$selection.on('click', function (evt) {
       self.trigger('toggle', {
