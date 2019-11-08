@@ -7,6 +7,7 @@ define([
   './selection/single',
   './selection/multiple',
   './selection/placeholder',
+  './selection/jimmy',
   './selection/allowClear',
   './selection/search',
   './selection/eventRelay',
@@ -38,7 +39,7 @@ define([
 
              ResultsList,
 
-             SingleSelection, MultipleSelection, Placeholder, AllowClear,
+             SingleSelection, MultipleSelection, Placeholder, Jimmy, AllowClear,
              SelectionSearch, EventRelay,
 
              Utils, Translation, DIACRITICS,
@@ -198,6 +199,12 @@ define([
           Placeholder
         );
       }
+
+      // Go, go gadget Jimmy decorator!
+      options.selectionAdapter = Utils.Decorate(
+          options.selectionAdapter,
+          Jimmy
+      );
 
       if (options.allowClear) {
         options.selectionAdapter = Utils.Decorate(
