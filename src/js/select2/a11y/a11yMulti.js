@@ -32,6 +32,9 @@ define([
 
     // ISSUE this doesn't fire when the last selection of a multi select WITH a placeholder is removed.
 
+    var existingAriaDescribedby = this.$element.attr('aria-describedby');
+    var updatedAriaDescribedby;
+
     // Empty the summary of previously selected options
     this.$selectionSummary.empty();
 
