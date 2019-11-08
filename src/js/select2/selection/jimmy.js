@@ -6,7 +6,7 @@ define([
   }
 
   Jimmy.prototype.update = function (decorated, data) {
-    console.log("JIMMY UPDATE!")
+    console.log("JIMMY UPDATE!", data)
     decorated.call(this, data);
   };
 
