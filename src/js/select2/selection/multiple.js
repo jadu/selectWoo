@@ -13,7 +13,6 @@ define([
     var $selection = MultipleSelection.__super__.render.call(this);
 
     $selection.addClass('select2-selection--multiple');
-
     $selection.html(
       '<ul class="select2-selection__rendered" ' +
       'aria-live="polite" ' +
@@ -26,9 +25,20 @@ define([
 
   MultipleSelection.prototype.bind = function (container, $container) {
     var self = this;
-    var label = this.options.get('label');
 
     MultipleSelection.__super__.bind.apply(this, arguments);
+
+    // Add a container for our accessible selection summary
+    var selectionSummaryId = container.id + '-summary';
+    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
+    $container.append(this.$selectionSummary);
+
+    // If orginal select had aria-describedby, add to select2 search
+    if (this.$element.attr('aria-describedby') != null) {
+      this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
+
+      // need to deal with things alrady selected on load
+    }
 
     this.$selection.on('click', function (evt) {
       self.trigger('toggle', {
@@ -122,7 +132,16 @@ define([
       return;
     }
 
+    // ISSUE - this doesn't fire for the last item when it's removed
+    // by either X on tag or deselect, so the 
+    // summary still contains the final selection option.
+
+    // Empty the summary of previously selected options
+    this.$selectionSummary.empty();
+
     var $selections = [];
+    var existingAriaDescribedby = this.$element.attr('aria-describedby');
+    var updatedAriaDescribedby;
 
     for (var d = 0; d < data.length; d++) {
       var selection = data[d];
@@ -139,7 +158,23 @@ define([
       $selection.data('data', selection);
 
       $selections.push($selection);
+
+      // Update selection summary (used for aria-describedby on search input)
+      this.$selectionSummary.append(formatted + ',');
     }
+
+    // Remove trailing comma if no element aria-describedby
+    if (typeof existingAriaDescribedby === 'undefined') {
+      this.$selectionSummary.text(this.$selectionSummary.text().replace(/,$/, ''));
+    }
+
+    // Update search field with selection summary aria-describedby
+    if (typeof existingAriaDescribedby !== 'undefined') {
+      updatedAriaDescribedby = this.$selectionSummary.attr('id') + ' ' + existingAriaDescribedby;
+    } else {
+      updatedAriaDescribedby = this.$selectionSummary.attr('id')
+    }
+    this.$search.attr('aria-describedby', updatedAriaDescribedby);
 
     var $rendered = this.$selection.find('.select2-selection__rendered');
 

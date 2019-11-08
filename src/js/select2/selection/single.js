@@ -33,6 +33,11 @@ define([
     var id = container.id + '-container';
     var label = this.options.get('label');
 
+    // // If orginal select had aria-describedby, add to select2-selection
+    // if (this.$element.attr('aria-describedby') != null) {
+    //   this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
+    // }
+
     // If a label is passed via options,
     // set aria label on select2-container for screen readers
     if (label) {
@@ -52,9 +57,11 @@ define([
         .attr('aria-disabled', 'true');
     }
 
-    // This makes single non-search selects work in screen readers.
-    // If it causes problems elsewhere, remove.
+    // This makes single selects work in screen readers.
+    // ARIA 1.1 states combobox should also have aria-controls and aria-owns.
     this.$selection.attr('role', 'combobox');
+    this.$selection.attr('aria-controls', id);
+    this.$selection.attr('aria-owns', id);
 
     this.$selection.on('mousedown', function (evt) {
       // Only respond to left clicks
@@ -121,7 +128,10 @@ define([
     var formatted = this.display(selection, $rendered);
 
     $rendered.empty().append(formatted);
-    $rendered.prop('title', selection.title || selection.text);
+    
+    // commenting out to try solve the double annoncement of the selection in VO
+    // fixes issues in VO, test in JAWS and NVDA.
+    //$rendered.prop('title', selection.title || selection.text);
   };
 
   return SingleSelection;

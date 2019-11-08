@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>SelectWoo</title>
     <link rel="stylesheet" href="css/select2.css" type="text/css" />
-    <script src="jquery-2.1.0.js" type="text/javascript"></script>
-    <script src="js/select2.full.js" type="text/javascript"></script>
+    <meta charset="utf-8">
+    <script src="jquery-2.1.0.js"></script>
+    <script src="js/select2.full.js"></script>
 
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $('.select2').select2();
 
@@ -51,7 +52,7 @@
         });
     </script>
 
-    <style type="text/css">
+    <style>
         .select2-container {
             width: 300px !important;
         }
@@ -68,10 +69,28 @@
 <body>
     <h1>SelectWoo testing area</h1>
 
+
+    <h2>TODO</h2>
+    <ul>
+        <li>Add support for aria-describedby</li>
+        <li>Add support for aria-labelledby</li>
+        <li>Address issue where multiple selects values aren't read on input focus</li>
+    </ul>
+
+<!--
+    <h3>Standard select</h3>
+
+    <label for="example-0">Pick your sauce</label>
+    <select id="example-0" name="example-0" data-placeholder="Please choose" data-label="Pick your sauce">
+        <option label="Choose"></option>
+        <option value="ketchup">Ketchup</option>
+        <option value="hot">Hot</option>
+        <option value="bbq">BBQ</option>
+    </select>
+
     <h3>Single selection</h3>
     <label for="example-1">Pick your sauce</label>
-    <select class="select2" id="example-1" name="example-1" data-placeholder="Please choose" data-label="Pick your sauce">
-        <option></option>
+    <select class="select2" id="example-1" name="example-1" data-label="Pick your sauce">
         <option value="ketchup">Ketchup</option>
         <option value="hot">Hot</option>
         <option value="bbq">BBQ</option>
@@ -80,7 +99,7 @@
     <h3>Single selection (Disabled)</h3>
     <label for="example-1-disabled">Pick your sauce</label>
     <select class="select2" id="example-1-disabled" name="example-1-disabled" data-placeholder="Please choose" data-label="Pick your sauce" disabled="disabled">
-        <option></option>
+        <option label="Choose"></option>
         <option value="ketchup">Ketchup</option>
         <option value="hot">Hot</option>
         <option value="bbq">BBQ</option>
@@ -133,5 +152,100 @@
         <li>JAWS 2018 (IE11)</li>
         <li>Mac VoiceOver (Chrome/Safari)</li>
     </ul>
+
+    <hr/>
+
+    <h2>Aria-labbeledby tests</h2>
+
+    <h3>Single selection</h3>
+    <label for="example-6">Pick your sauce</label>
+    <h4 id="labelled-by-text-1">Labelled by text</h4>
+    <select class="select2" id="example-6" name="example-6" data-placeholder="Please choose" data-label="Pick your sauce" aria-labelledby="labelled-by-text-1">
+        <option label="Choose"></option>
+        <option value="ketchup">Ketchup</option>
+        <option value="hot">Hot</option>
+        <option value="bbq">BBQ</option>
+    </select>
+
+    <hr/>
+-->
+
+
+<!--
+    <h2>Standard select</h2>
+    <label for="example-0">Pick your sauce</label>
+    <select id="example-0" name="example-0" data-placeholder="Please choose" data-label="Pick your sauce">
+        <option label="Choose"></option>
+        <option value="ketchup">Ketchup</option>
+        <option value="hot">Hot</option>
+        <option value="bbq">BBQ</option>
+    </select>
+
+    <h2>Standard select with fake placeholder</h2>
+    <label for="example-1">Pick your framework</label>
+    <select id="example-1">
+      <option value="" disabled selected hidden>Choose your framework</option>
+      <option value="react">React</option>
+      <option value="Vue">Vue</option>
+      <option value="Angular">Angular</option>
+    </select>
+-->
+    <h2>Aria-describedby tests</h2>
+
+    <h3>Single selection (with placeholder)</h3>
+    <label for="example-7">Pick your sauce</label>
+    <select class="select2" id="example-7" name="example-7" data-placeholder="Please choose" data-label="Pick your sauce" aria-describedby="described-by-text-1">
+        <option label="Choose"></option>
+        <option value="ketchup">Ketchup</option>
+        <option value="hot">Hot</option>
+        <option value="bbq">BBQ</option>
+    </select>
+    <p id="described-by-text-1">described by text</p>
+
+    <h3>Single selection (without placeholder)</h3>
+    <label for="example-8">Pick your sauce</label>
+    <select class="select2" id="example-8" name="example-8" data-label="Pick your sauce" aria-describedby="described-by-text-2">
+        <option value="ketchup">Ketchup</option>
+        <option value="hot">Hot</option>
+        <option value="bbq">BBQ</option>
+    </select>
+    <p id="described-by-text-2">described by text</p>
+
+    <h3>Multiple selection (with placeholder)</h3>
+    <label for="example-9">Select users</label>
+    <select class="select2" id="example-9" name="example-9" data-label="Select users" data-placeholder="Please choose one or more" aria-describedby="described-by-text-3" multiple>
+        <option value="bob">Bob</option>
+        <option value="sally">Sally</option>
+        <option value="fred">Fred</option>
+    </select>
+    <p id="described-by-text-3">described by text 3</p>
+
+    <h3>Multiple selection (without placeholder)</h3>
+    <label for="example-10">Select users</label>
+    <select class="select2" id="example-10" name="example-10" data-label="Select users" multiple aria-describedby="described-by-text-4">
+        <option value="bob">Bob</option>
+        <option value="sally">Sally</option>
+        <option value="fred">Fred</option>
+    </select>
+    <p id="described-by-text-4">described by text 4</p>
+<!--
+    <h3>Multiple selection (with placeholder and preselected options)</h3>
+    <label for="example-11">Select users</label>
+    <select class="select2" id="example-11" name="example-11" data-label="Select users" data-placeholder="Please choose one or more" aria-describedby="described-by-text-5" multiple>
+        <option value="bob" selected="selected">Bob</option>
+        <option value="sally" selected="selected">Sally</option>
+        <option value="fred">Fred</option>
+    </select>
+    <p id="described-by-text-5">described by text 5</p>
+
+
+    <h3>Multiple selection (without placeholder)</h3>
+    <label for="example-12">Select users</label>
+    <select class="select2" id="example-12" name="example-12" data-label="Select users" multiple>
+        <option value="bob">Bob</option>
+        <option value="sally" selected="selected">Sally</option>
+        <option value="fred" selected="selected">Fred</option>
+    </select>
+-->
 </body>
 </html>
