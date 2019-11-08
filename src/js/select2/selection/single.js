@@ -33,11 +33,6 @@ define([
     var id = container.id + '-container';
     var label = this.options.get('label');
 
-    // // If orginal select had aria-describedby, add to select2-selection
-    // if (this.$element.attr('aria-describedby') != null) {
-    //   this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
-    // }
-
     // If a label is passed via options,
     // set aria label on select2-container for screen readers
     if (label) {

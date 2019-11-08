@@ -14,6 +14,7 @@ define([
 
     // a11y code here...
 
+    // Add a container for accessible selection summary
     var selectionSummaryId = container.id + '-summary';
     this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
     $container.append(this.$selectionSummary);
@@ -29,9 +30,38 @@ define([
   A11yMulti.prototype.update = function (decorated, data) {
     console.log("MULTI UPDATE!")
 
-    // issue this doesn't fire when the last selection of a multi select WITH a placeholder is removed.
+    // ISSUE this doesn't fire when the last selection of a multi select WITH a placeholder is removed.
 
-    console.log(data);
+    // Empty the summary of previously selected options
+    this.$selectionSummary.empty();
+
+    // Update accessible selection summary with selections
+    for (var d = 0; d < data.length; d++) {
+      var selection = data[d];
+      var $selection = this.selectionContainer();
+      var formatted = this.display(selection, $selection);
+
+      if ('string' === typeof formatted) {
+        formatted = formatted.trim();
+      } 
+
+      // Update selection summary (used for aria-describedby on search input)
+      this.$selectionSummary.append(formatted + ',');
+    }
+
+    // Remove trailing comma if no element aria-describedby
+    if (typeof existingAriaDescribedby === 'undefined') {
+      this.$selectionSummary.text(this.$selectionSummary.text().replace(/,$/, ''));
+    }
+
+    // Update search field with selection summary aria-describedby
+    if (typeof existingAriaDescribedby !== 'undefined') {
+      updatedAriaDescribedby = this.$selectionSummary.attr('id') + ' ' + existingAriaDescribedby;
+    } else {
+      updatedAriaDescribedby = this.$selectionSummary.attr('id')
+    }
+    this.$search.attr('aria-describedby', updatedAriaDescribedby);
+
 
     return decorated.call(this, data);
   }
