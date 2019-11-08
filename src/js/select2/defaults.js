@@ -7,10 +7,12 @@ define([
   './selection/single',
   './selection/multiple',
   './selection/placeholder',
-  './selection/jimmy',
   './selection/allowClear',
   './selection/search',
   './selection/eventRelay',
+
+  './a11y/a11ySingle',
+  './a11y/a11yMulti',
 
   './utils',
   './translation',
@@ -39,8 +41,10 @@ define([
 
              ResultsList,
 
-             SingleSelection, MultipleSelection, Placeholder, Jimmy, AllowClear,
+             SingleSelection, MultipleSelection, Placeholder, AllowClear,
              SelectionSearch, EventRelay,
+
+             A11ySingle, A11yMulti,
 
              Utils, Translation, DIACRITICS,
 
@@ -187,9 +191,15 @@ define([
 
     if (options.selectionAdapter == null) {
       if (options.multiple) {
-        options.selectionAdapter = MultipleSelection;
+        options.selectionAdapter = Utils.Decorate(
+          MultipleSelection,
+          A11yMulti
+        );
       } else {
-        options.selectionAdapter = SingleSelection;
+        options.selectionAdapter = Utils.Decorate(
+          SingleSelection,
+          A11ySingle
+        );
       }
 
       // Add the placeholder mixin if a placeholder was specified
@@ -199,12 +209,6 @@ define([
           Placeholder
         );
       }
-
-      // Go, go gadget Jimmy decorator!
-      options.selectionAdapter = Utils.Decorate(
-          options.selectionAdapter,
-          Jimmy
-      );
 
       if (options.allowClear) {
         options.selectionAdapter = Utils.Decorate(
