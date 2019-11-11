@@ -191,15 +191,9 @@ define([
 
     if (options.selectionAdapter == null) {
       if (options.multiple) {
-        options.selectionAdapter = Utils.Decorate(
-          MultipleSelection,
-          A11yMulti
-        );
+        options.selectionAdapter = MultipleSelection;
       } else {
-        options.selectionAdapter = Utils.Decorate(
-          SingleSelection,
-          A11ySingle
-        );
+        options.selectionAdapter = SingleSelection;
       }
 
       // Add the placeholder mixin if a placeholder was specified
@@ -209,6 +203,12 @@ define([
           Placeholder
         );
       }
+
+      // Mixin a11y decorators
+      options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter,
+        options.multiple ? A11yMulti : A11ySingle
+      );
 
       if (options.allowClear) {
         options.selectionAdapter = Utils.Decorate(

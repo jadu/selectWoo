@@ -8,12 +8,6 @@ define([
   A11yMulti.prototype.bind = function (decorated, container, $container) {
     console.log("MULTI BIND!")
 
-    console.log(decorated);
-    console.log(container);
-    console.log($container);
-
-    // a11y code here...
-
     // Add a container for accessible selection summary
     var selectionSummaryId = container.id + '-summary';
     this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
