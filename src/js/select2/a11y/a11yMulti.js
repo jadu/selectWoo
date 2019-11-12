@@ -6,11 +6,10 @@ define([
   }
 
   A11yMulti.prototype.bind = function (decorated, container, $container) {
-    console.log("MULTI BIND!")
 
     // Add a container for accessible selection summary
     var selectionSummaryId = container.id + '-summary';
-    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
+    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections select2-hidden-accessible"></span>');
     $container.append(this.$selectionSummary);
 
     // If orginal select had aria-describedby, add to select2 search
@@ -22,9 +21,6 @@ define([
   };
 
   A11yMulti.prototype.update = function (decorated, data) {
-    console.log("MULTI UPDATE!")
-
-    // ISSUE this doesn't fire when the last selection of a multi select WITH a placeholder is removed.
 
     var existingAriaDescribedby = this.$element.attr('aria-describedby');
     var updatedAriaDescribedby;

@@ -6,7 +6,6 @@ define([
   }
 
   A11ySingle.prototype.bind = function (decorated, data) {
-    console.log("SINGLE BIND!", data)
 
     // If orginal select had aria-describedby, add to select2-selection
     if (this.$element.attr('aria-describedby') != null) {
