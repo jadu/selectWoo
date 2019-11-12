@@ -1359,7 +1359,6 @@ S2.define('select2/selection/base',[
       ' aria-haspopup="true" aria-expanded="false">' +
       '</span>'
     );
-    // Should haspopup here be "listbox"? Issue is it doesn't control the list box, in effect it controls the textbox... confused.
 
     this._tabindex = 0;
 
