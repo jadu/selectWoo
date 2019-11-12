@@ -1359,6 +1359,7 @@ S2.define('select2/selection/base',[
       ' aria-haspopup="true" aria-expanded="false">' +
       '</span>'
     );
+    // Should haspopup here be "listbox"? Issue is it doesn't control the list box, in effect it controls the textbox... confused.
 
     this._tabindex = 0;
 
@@ -1554,14 +1555,18 @@ S2.define('select2/selection/single',[
       .attr('aria-readonly', 'true');
     this.$selection.attr('aria-labelledby', id);
 
-    // If element is disabled, add aria-disabled to rendered element for screen readers
+    // If element is disabled, 
+    // add aria-disabled to rendered element for screen readers
     if (this.container.$element.attr('disabled')) {
-      this.$selection.find('.select2-selection__rendered').attr('aria-disabled', 'true');
+      this.$selection.find('.select2-selection__rendered')
+        .attr('aria-disabled', 'true');
     }
 
-    // This makes single non-search selects work in screen readers.
-    // If it causes problems elsewhere, remove.
+    // This makes single selects work in screen readers.
+    // ARIA 1.1 states combobox should also have aria-controls and aria-owns.
     this.$selection.attr('role', 'combobox');
+    this.$selection.attr('aria-controls', id);
+    this.$selection.attr('aria-owns', id);
 
     this.$selection.on('mousedown', function (evt) {
       // Only respond to left clicks
@@ -1628,7 +1633,10 @@ S2.define('select2/selection/single',[
     var formatted = this.display(selection, $rendered);
 
     $rendered.empty().append(formatted);
-    $rendered.prop('title', selection.title || selection.text);
+    
+    // commenting out to try solve the double annoncement of the selection in VO
+    // fixes issues in VO, test in JAWS and NVDA.
+    //$rendered.prop('title', selection.title || selection.text);
   };
 
   return SingleSelection;
@@ -1649,7 +1657,6 @@ S2.define('select2/selection/multiple',[
     var $selection = MultipleSelection.__super__.render.call(this);
 
     $selection.addClass('select2-selection--multiple');
-
     $selection.html(
       '<ul class="select2-selection__rendered" ' +
       'aria-live="polite" ' +
@@ -1662,7 +1669,6 @@ S2.define('select2/selection/multiple',[
 
   MultipleSelection.prototype.bind = function (container, $container) {
     var self = this;
-    var label = this.options.get('label');
 
     MultipleSelection.__super__.bind.apply(this, arguments);
 
@@ -2214,6 +2220,90 @@ S2.define('select2/selection/eventRelay',[
   };
 
   return EventRelay;
+});
+
+S2.define('select2/a11y/a11ySingle',[
+  '../utils'
+], function (Utils) {
+  function A11ySingle (decorated, $element, options) {
+    decorated.call(this, $element, options);
+  }
+
+  A11ySingle.prototype.bind = function (decorated, data) {
+
+    // If orginal select had aria-describedby, add to select2-selection
+    if (this.$element.attr('aria-describedby') != null) {
+      this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
+    }
+
+    return decorated.call(this, data);
+  };
+
+  return A11ySingle;
+});
+
+S2.define('select2/a11y/a11yMulti',[
+  '../utils'
+], function (Utils) {
+  function A11yMulti (decorated, $element, options) {
+    decorated.call(this, $element, options);
+  }
+
+  A11yMulti.prototype.bind = function (decorated, container, $container) {
+
+    // Add a container for accessible selection summary
+    var selectionSummaryId = container.id + '-summary';
+    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections select2-hidden-accessible"></span>');
+    $container.append(this.$selectionSummary);
+
+    // If orginal select had aria-describedby, add to select2 search
+    if (this.$element.attr('aria-describedby') != null) {
+      this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
+    }
+
+    return decorated.call(this, container);
+  };
+
+  A11yMulti.prototype.update = function (decorated, data) {
+
+    var existingAriaDescribedby = this.$element.attr('aria-describedby');
+    var updatedAriaDescribedby;
+
+    // Empty the summary of previously selected options
+    this.$selectionSummary.empty();
+
+    // Update accessible selection summary with selections
+    for (var d = 0; d < data.length; d++) {
+      var selection = data[d];
+      var $selection = this.selectionContainer();
+      var formatted = this.display(selection, $selection);
+
+      if ('string' === typeof formatted) {
+        formatted = formatted.trim();
+      } 
+
+      // Update selection summary (used for aria-describedby on search input)
+      this.$selectionSummary.append(formatted + ',');
+    }
+
+    // Remove trailing comma if no element aria-describedby
+    if (typeof existingAriaDescribedby === 'undefined') {
+      this.$selectionSummary.text(this.$selectionSummary.text().replace(/,$/, ''));
+    }
+
+    // Update search field with selection summary aria-describedby
+    if (typeof existingAriaDescribedby !== 'undefined') {
+      updatedAriaDescribedby = this.$selectionSummary.attr('id') + ' ' + existingAriaDescribedby;
+    } else {
+      updatedAriaDescribedby = this.$selectionSummary.attr('id')
+    }
+    this.$search.attr('aria-describedby', updatedAriaDescribedby);
+
+
+    return decorated.call(this, data);
+  }
+
+  return A11yMulti;
 });
 
 S2.define('select2/translation',[
@@ -4658,6 +4748,9 @@ S2.define('select2/defaults',[
   './selection/search',
   './selection/eventRelay',
 
+  './a11y/a11ySingle',
+  './a11y/a11yMulti',
+
   './utils',
   './translation',
   './diacritics',
@@ -4687,6 +4780,8 @@ S2.define('select2/defaults',[
 
              SingleSelection, MultipleSelection, Placeholder, AllowClear,
              SelectionSearch, EventRelay,
+
+             A11ySingle, A11yMulti,
 
              Utils, Translation, DIACRITICS,
 
@@ -4845,6 +4940,12 @@ S2.define('select2/defaults',[
           Placeholder
         );
       }
+
+      // Mixin a11y decorators
+      // options.selectionAdapter = Utils.Decorate(
+      //   options.selectionAdapter,
+      //   options.multiple ? A11yMulti : A11ySingle
+      // );
 
       if (options.allowClear) {
         options.selectionAdapter = Utils.Decorate(
@@ -5497,8 +5598,8 @@ S2.define('select2/core',[
       if (self.isDisabled()) {
         return;
       }
-      
-      if (self.isOpen()) {      
+
+      if (self.isOpen()) {
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
           self.close();
@@ -5690,7 +5791,8 @@ S2.define('select2/core',[
   };
 
   Select2.prototype.focus = function (data) {
-    // No need to re-trigger focus events if we are already focused
+    // No need to re-trigger focus events if we are already focused,
+    // we will prevent focus if the instance is disabled
     if (this.hasFocus() || this.isDisabled()) {
       return;
     }
