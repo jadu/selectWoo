@@ -1542,6 +1542,7 @@ S2.define('select2/selection/single',[
 
     var id = container.id + '-container';
     var label = this.options.get('label');
+    var placeholder = this.options.get('placeholder');
 
     // If a label is passed via options,
     // set aria label on select2-container for screen readers
@@ -1553,7 +1554,11 @@ S2.define('select2/selection/single',[
       .attr('id', id)
       .attr('role', 'textbox')
       .attr('aria-readonly', 'true');
-    this.$selection.attr('aria-labelledby', id);
+
+    // role="textbox" require a text label (not needed when no placeholder is present as first option is selected)
+    if (placeholder) {
+      this.$selection.find('.select2-selection__rendered').attr('aria-label', placeholder);
+    }
 
     // If element is disabled, 
     // add aria-disabled to rendered element for screen readers
@@ -1634,9 +1639,8 @@ S2.define('select2/selection/single',[
 
     $rendered.empty().append(formatted);
     
-    // commenting out to try solve the double annoncement of the selection in VO
-    // fixes issues in VO, test in JAWS and NVDA.
-    //$rendered.prop('title', selection.title || selection.text);
+    // Update aria-label with selected option
+    $rendered.attr('aria-label', selection.title || selection.text);
   };
 
   return SingleSelection;
@@ -4942,10 +4946,10 @@ S2.define('select2/defaults',[
       }
 
       // Mixin a11y decorators
-      // options.selectionAdapter = Utils.Decorate(
-      //   options.selectionAdapter,
-      //   options.multiple ? A11yMulti : A11ySingle
-      // );
+      options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter,
+        options.multiple ? A11yMulti : A11ySingle
+      );
 
       if (options.allowClear) {
         options.selectionAdapter = Utils.Decorate(
