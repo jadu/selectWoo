@@ -9,7 +9,7 @@ define([
 
     // Add a container for accessible selection summary
     var selectionSummaryId = container.id + '-summary';
-    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections select2-display-none"></span>');
+    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
     $container.append(this.$selectionSummary);
 
     // If orginal select had aria-describedby, add to select2 search
