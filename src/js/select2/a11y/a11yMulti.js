@@ -13,7 +13,7 @@ define([
     $container.append(this.$selectionSummary);
 
     // If orginal select had aria-describedby, add to select2 search
-    if (this.$element.attr('aria-describedby') != null) {
+    if (this.$element.attr('aria-describedby') !== undefined) {
       this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
 
@@ -43,12 +43,12 @@ define([
     }
 
     // Remove trailing comma if no element aria-describedby
-    if (typeof existingAriaDescribedby === 'undefined') {
+    if (existingAriaDescribedby === undefined) {
       this.$selectionSummary.text(this.$selectionSummary.text().replace(/,$/, ''));
     }
 
     // Update search field with selection summary aria-describedby
-    if (typeof existingAriaDescribedby !== 'undefined') {
+    if (existingAriaDescribedby !== undefined) {
       updatedAriaDescribedby = this.$selectionSummary.attr('id') + ' ' + existingAriaDescribedby;
     } else {
       updatedAriaDescribedby = this.$selectionSummary.attr('id')
