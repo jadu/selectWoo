@@ -2235,7 +2235,7 @@ S2.define('select2/a11y/a11ySingle',[
   A11ySingle.prototype.bind = function (decorated, data) {
 
     // If orginal select had aria-describedby, add to select2-selection
-    if (this.$element.attr('aria-describedby') !== null) {
+    if (this.$element.attr('aria-describedby') !== undefined) {
       this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
 
