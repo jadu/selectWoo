@@ -32,6 +32,7 @@ define([
 
     var id = container.id + '-container';
     var label = this.options.get('label');
+    var placeholder = this.options.get('placeholder');
 
     // If a label is passed via options,
     // set aria label on select2-container for screen readers
@@ -43,7 +44,11 @@ define([
       .attr('id', id)
       .attr('role', 'textbox')
       .attr('aria-readonly', 'true');
-    this.$selection.attr('aria-labelledby', id);
+
+    // role="textbox" require a text label (not needed when no placeholder is present as first option is selected)
+    if (placeholder) {
+      this.$selection.find('.select2-selection__rendered').attr('aria-label', placeholder);
+    }
 
     // If element is disabled, 
     // add aria-disabled to rendered element for screen readers
@@ -52,9 +57,11 @@ define([
         .attr('aria-disabled', 'true');
     }
 
-    // This makes single non-search selects work in screen readers.
-    // If it causes problems elsewhere, remove.
+    // This makes single selects work in screen readers.
+    // ARIA 1.1 states combobox should also have aria-controls and aria-owns.
     this.$selection.attr('role', 'combobox');
+    this.$selection.attr('aria-controls', id);
+    this.$selection.attr('aria-owns', id);
 
     this.$selection.on('mousedown', function (evt) {
       // Only respond to left clicks
@@ -121,7 +128,9 @@ define([
     var formatted = this.display(selection, $rendered);
 
     $rendered.empty().append(formatted);
-    $rendered.prop('title', selection.title || selection.text);
+    
+    // Update aria-label with selected option
+    $rendered.attr('aria-label', selection.title || selection.text);
   };
 
   return SingleSelection;

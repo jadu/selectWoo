@@ -11,6 +11,9 @@ define([
   './selection/search',
   './selection/eventRelay',
 
+  './a11y/a11ySingle',
+  './a11y/a11yMulti',
+
   './utils',
   './translation',
   './diacritics',
@@ -40,6 +43,8 @@ define([
 
              SingleSelection, MultipleSelection, Placeholder, AllowClear,
              SelectionSearch, EventRelay,
+
+             A11ySingle, A11yMulti,
 
              Utils, Translation, DIACRITICS,
 
@@ -198,6 +203,12 @@ define([
           Placeholder
         );
       }
+
+      // Mixin a11y decorators
+      options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter,
+        options.multiple ? A11yMulti : A11ySingle
+      );
 
       if (options.allowClear) {
         options.selectionAdapter = Utils.Decorate(

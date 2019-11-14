@@ -13,7 +13,6 @@ define([
     var $selection = MultipleSelection.__super__.render.call(this);
 
     $selection.addClass('select2-selection--multiple');
-
     $selection.html(
       '<ul class="select2-selection__rendered" ' +
       'aria-live="polite" ' +
@@ -26,7 +25,6 @@ define([
 
   MultipleSelection.prototype.bind = function (container, $container) {
     var self = this;
-    var label = this.options.get('label');
 
     MultipleSelection.__super__.bind.apply(this, arguments);
 
