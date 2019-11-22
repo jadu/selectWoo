@@ -2288,7 +2288,7 @@ S2.define('select2/a11y/a11yMulti',[
         this.$selectionSummary.append(formatted.trim() + ',');
       }
 
-      if (typeof formatted === 'object') {
+      if (formatted instanceof jQuery) {
         this.$selectionSummary.append(formatted.text().trim() + ',');
       }
     }
