@@ -2283,10 +2283,16 @@ S2.define('select2/a11y/a11yMulti',[
 
       if ('string' === typeof formatted) {
         formatted = formatted.trim();
-      } 
+      }
 
       // Update selection summary (used for aria-describedby on search input)
-      this.$selectionSummary.append(formatted + ',');
+      if (typeof formatted === 'string') {
+        this.$selectionSummary.append(formatted + ',');
+      }
+
+      if (typeof formatted === 'object') {
+        this.$selectionSummary.append(formatted.text().trim() + ',');
+      }
     }
 
     // Remove trailing comma if no element aria-describedby
