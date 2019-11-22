@@ -1,6 +1,7 @@
 define([
+  'jquery',
   '../utils'
-], function (Utils) {
+], function ($, Utils) {
   function A11ySingle (decorated, $element, options) {
     decorated.call(this, $element, options);
   }
