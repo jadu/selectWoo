@@ -1,6 +1,7 @@
 define([
+  'jquery',
   '../utils'
-], function (Utils) {
+], function ($, Utils) {
   function A11yMulti (decorated, $element, options) {
     decorated.call(this, $element, options);
   }
@@ -34,13 +35,9 @@ define([
       var $selection = this.selectionContainer();
       var formatted = this.display(selection, $selection);
 
-      if ('string' === typeof formatted) {
-        formatted = formatted.trim();
-      }
-
       // Update selection summary (used for aria-describedby on search input)
       if (typeof formatted === 'string') {
-        this.$selectionSummary.append(formatted + ',');
+        this.$selectionSummary.append(formatted.trim() + ',');
       }
 
       if (typeof formatted === 'object') {

@@ -2226,8 +2226,9 @@ S2.define('select2/selection/eventRelay',[
 });
 
 S2.define('select2/a11y/a11ySingle',[
+  'jquery',
   '../utils'
-], function (Utils) {
+], function ($, Utils) {
   function A11ySingle (decorated, $element, options) {
     decorated.call(this, $element, options);
   }
@@ -2246,8 +2247,9 @@ S2.define('select2/a11y/a11ySingle',[
 });
 
 S2.define('select2/a11y/a11yMulti',[
+  'jquery',
   '../utils'
-], function (Utils) {
+], function ($, Utils) {
   function A11yMulti (decorated, $element, options) {
     decorated.call(this, $element, options);
   }
@@ -2281,13 +2283,9 @@ S2.define('select2/a11y/a11yMulti',[
       var $selection = this.selectionContainer();
       var formatted = this.display(selection, $selection);
 
-      if ('string' === typeof formatted) {
-        formatted = formatted.trim();
-      }
-
       // Update selection summary (used for aria-describedby on search input)
       if (typeof formatted === 'string') {
-        this.$selectionSummary.append(formatted + ',');
+        this.$selectionSummary.append(formatted.trim() + ',');
       }
 
       if (typeof formatted === 'object') {
