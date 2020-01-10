@@ -82,7 +82,7 @@ define([
       // This needs to be delayed as the active element is the body when the
       // key is pressed.
       window.setTimeout(function () {
-        self.$selection.focus();
+        self.$selection.trigger('focus');
       }, 1);
 
       self._detachCloseHandler(container);
@@ -139,8 +139,8 @@ define([
         // clicking outside the select area. Timeout of
         // 1 required for close to finish wrapping up.
         setTimeout(function(){
-         $this.find('*:focus').blur();
-         $target.focus();
+         $this.find('*:focus').trigger('blur');
+         $target.trigger('focus');
         }, 1);
       });
     });

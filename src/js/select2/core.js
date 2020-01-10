@@ -366,7 +366,7 @@ define([
             self.focusOnActiveElement();
         } else {
           // Focus on the search if user starts typing.
-          $searchField.focus();
+          $searchField.trigger('focus');
           // Focus back to active selection when finished typing.
           // Small delay so typed character can be read by screen reader.
           setTimeout(function(){
@@ -387,7 +387,7 @@ define([
     // Don't mess with the focus on touchscreens
     // because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
-      this.$results.find('li.select2-results__option--highlighted').focus();
+      this.$results.find('li.select2-results__option--highlighted').trigger('focus');
     }
   };
 

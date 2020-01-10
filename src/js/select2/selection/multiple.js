@@ -108,7 +108,7 @@ define([
         // This gets reset automatically when focus is triggered.
         self._keyUpPrevented = true;
 
-        self.$search.focus();
+        self.$search.trigger('focus');
       }, 1);
     }
   };
