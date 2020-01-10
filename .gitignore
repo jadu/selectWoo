@@ -1,5 +1,4 @@
 node_modules
-vendor
 !tests/vendor
 components
 composer.lock
