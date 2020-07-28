@@ -16,6 +16,7 @@ test('click event does not propagate', function (assert) {
 
   var $container = $('#qunit-fixture .event-container');
   var container = new MockContainer();
+  container.$element = $('#qunit-fixture .event-container select');
 
   var selection = new CutomSelection($('#qunit-fixture select'), options);
 

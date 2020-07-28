@@ -115,3 +115,131 @@ test('escapeMarkup is being used', function (assert) {
     'The text should be escaped by default to prevent injection'
   );
 });
+
+test('aria-label should include placeholder and label', function (assert) {
+  var options = new Options({'label': 'Example', 'placeholder': 'Choose'});
+  var selection = new SingleSelection(
+    $('#qunit-fixture .single'),
+    options
+  );
+
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  container.$element = $('#qunit-fixture .single');
+  selection.bind(container, $('<span></span>'));
+
+  assert.equal($selection.attr('aria-label'),
+    'Example, Choose',
+    'The container aria-label should include the label and placeholder'
+  );
+});
+
+test('aria-role should be set', function (assert) {
+  var selection = new SingleSelection(
+    $('#qunit-fixture .single'),
+    options
+  );
+
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  container.$element = $('#qunit-fixture .single');
+  selection.bind(container, $('<span></span>'));
+
+  assert.equal($selection.attr('role'),
+    'combobox',
+    'The container should identify as a combobox'
+  );
+});
+
+test('aria-controls should be set', function (assert) {
+  var selection = new SingleSelection(
+    $('#qunit-fixture .single'),
+    options
+  );
+
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  container.$element = $('#qunit-fixture .single');
+  selection.bind(container, $('<span></span>'));
+
+  var $rendered = $selection.find('.select2-selection__rendered');
+
+  assert.equal(
+    $selection.attr('aria-controls'),
+    $rendered.attr('id'),
+    'The rendered selection should control the container'
+  );
+});
+
+test('aria-owns should be set', function (assert) {
+  var selection = new SingleSelection(
+    $('#qunit-fixture .single'),
+    options
+  );
+
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  container.$element = $('#qunit-fixture .single');
+  selection.bind(container, $('<span></span>'));
+
+  var $rendered = $selection.find('.select2-selection__rendered');
+
+  assert.equal(
+    $selection.attr('aria-owns'),
+    $rendered.attr('id'),
+    'The rendered selection should control the container'
+  );
+});
+
+test('update renders the aria-label with label + selection', function (assert) {
+  var $element = $('#qunit-fixture .single');
+  var options = new Options({'label': 'Example'});
+
+  var selection = new SingleSelection(
+    $element,
+    options
+  );
+
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  container.$element = $element;
+  selection.bind(container, $('<span></span>'));
+
+  selection.update([{
+    text: 'test'
+  }]);
+
+  assert.equal($selection.attr('aria-label'),
+    'Example, test',
+    'The container aria-label should include the label and selection'
+  );
+});
+
+test('update renders the aria-label with selection', function (assert) {
+  var $element = $('#qunit-fixture .single');
+
+  var selection = new SingleSelection(
+    $element,
+    options
+  );
+
+  var $selection = selection.render();
+
+  var container = new MockContainer();
+  container.$element = $element;
+  selection.bind(container, $('<span></span>'));
+
+  selection.update([{
+    text: 'test'
+  }]);
+
+  assert.equal($selection.attr('aria-label'),
+    'test',
+    'The container aria-label should include the selection'
+  );
+});
