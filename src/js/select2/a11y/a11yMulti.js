@@ -10,12 +10,15 @@ define([
 
     // Add a container for accessible selection summary
     var selectionSummaryId = container.id + '-summary';
-    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
+    this.$selectionSummary = $(
+      '<span id="'+ selectionSummaryId +'" class="select2-selections"></span>'
+    );
     $container.append(this.$selectionSummary);
 
     // If orginal select had aria-describedby, add to select2 search
     if (this.$element.attr('aria-describedby') !== undefined) {
-      this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
+      this.$search
+        .attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
 
     return decorated.call(this, container);
@@ -23,8 +26,8 @@ define([
 
   A11yMulti.prototype.update = function (decorated, data) {
 
-    var existingAriaDescribedby = this.$element.attr('aria-describedby');
-    var updatedAriaDescribedby;
+    var oldAriaDescBy = this.$element.attr('aria-describedby');
+    var newAriaDescBy;
 
     // Empty the summary of previously selected options
     this.$selectionSummary.empty();
@@ -40,27 +43,28 @@ define([
         this.$selectionSummary.append(formatted.trim() + ',');
       }
 
-      if (formatted instanceof jQuery) {
+      if (formatted instanceof jQuery) { //jshint ignore:line
         this.$selectionSummary.append(formatted.text().trim() + ',');
       }
     }
 
     // Remove trailing comma if no element aria-describedby
-    if (existingAriaDescribedby === undefined) {
-      this.$selectionSummary.text(this.$selectionSummary.text().replace(/,$/, ''));
+    if (oldAriaDescBy === undefined) {
+      this.$selectionSummary
+        .text(this.$selectionSummary.text().replace(/,$/, ''));
     }
 
     // Update search field with selection summary aria-describedby
-    if (existingAriaDescribedby !== undefined) {
-      updatedAriaDescribedby = this.$selectionSummary.attr('id') + ' ' + existingAriaDescribedby;
+    if (oldAriaDescBy !== undefined) {
+      newAriaDescBy = this.$selectionSummary.attr('id') + ' ' + oldAriaDescBy;
     } else {
-      updatedAriaDescribedby = this.$selectionSummary.attr('id')
+      newAriaDescBy = this.$selectionSummary.attr('id');
     }
-    this.$search.attr('aria-describedby', updatedAriaDescribedby);
+    this.$search.attr('aria-describedby', newAriaDescBy);
 
 
     return decorated.call(this, data);
-  }
+  };
 
   return A11yMulti;
 });

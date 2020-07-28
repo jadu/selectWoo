@@ -387,7 +387,8 @@ define([
     // Don't mess with the focus on touchscreens
     // because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
-      this.$results.find('li.select2-results__option--highlighted').trigger('focus');
+      this.$results.find('li.select2-results__option--highlighted')
+        .trigger('focus');
     }
   };
 
