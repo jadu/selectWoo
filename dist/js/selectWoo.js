@@ -1543,20 +1543,23 @@ S2.define('select2/selection/single',[
     var label = this.options.get('label');
     var placeholder = this.options.get('placeholder');
 
-    // If a label is passed via options,
-    // set aria label on select2-container for screen readers
-    if (label) {
-      this.container.$container.attr('aria-label', label);
-    }
-
     this.$selection.find('.select2-selection__rendered')
       .attr('id', id)
       .attr('role', 'textbox')
       .attr('aria-readonly', 'true');
 
-    // role="textbox" require a text label (not needed when no placeholder is present as first option is selected)
     if (placeholder) {
-      this.$selection.find('.select2-selection__rendered').attr('aria-label', placeholder);
+      // role="textbox" requires a text label 
+      // not needed when placeholder absent as first option is selected
+      this.$selection.find('.select2-selection__rendered')
+        .attr('aria-label', placeholder);
+
+      if (label) {
+        // role=combobox requires a label 
+        // we're adding the label and placeholder here 
+        // so they both get announced
+        this.$selection.attr('aria-label', label + ', ' + placeholder);
+      }
     }
 
     // If element is disabled, 
@@ -1568,6 +1571,7 @@ S2.define('select2/selection/single',[
 
     // This makes single selects work in screen readers.
     // ARIA 1.1 states combobox should also have aria-controls and aria-owns.
+    // https://www.w3.org/TR/wai-aria-1.1/#combobox
     this.$selection.attr('role', 'combobox');
     this.$selection.attr('aria-controls', id);
     this.$selection.attr('aria-owns', id);
@@ -1638,8 +1642,22 @@ S2.define('select2/selection/single',[
 
     $rendered.empty().append(formatted);
     
-    // Update aria-label with selected option
+    // Update aria-label with selected option (role="textbox" requires a label)
     $rendered.attr('aria-label', selection.title || selection.text);
+
+    var label = this.options.get('label');
+    var selectedValueText = selection.title || selection.text;
+    var placeholder = this.options.get('placeholder');
+
+    // selection has role="combobox" and therefore requires a label
+    // but adding just the label results in only the label being read 
+    // and not the selection/placeholder (in JAWS & NVDA) 
+    // so we add the label and the selection/placeholder
+    if (label) {
+      this.$selection.attr('aria-label', label + ', ' + selectedValueText);
+    } else {
+      this.$selection.attr('aria-label', selectedValueText);
+    }
   };
 
   return SingleSelection;
@@ -2237,7 +2255,8 @@ S2.define('select2/a11y/a11ySingle',[
 
     // If orginal select had aria-describedby, add to select2-selection
     if (this.$element.attr('aria-describedby') !== undefined) {
-      this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
+      this.$selection
+        .attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
 
     return decorated.call(this, data);
@@ -2258,12 +2277,15 @@ S2.define('select2/a11y/a11yMulti',[
 
     // Add a container for accessible selection summary
     var selectionSummaryId = container.id + '-summary';
-    this.$selectionSummary = $('<span id="'+ selectionSummaryId +'" class="select2-selections"></span>');
+    this.$selectionSummary = $(
+      '<span id="'+ selectionSummaryId +'" class="select2-selections"></span>'
+    );
     $container.append(this.$selectionSummary);
 
     // If orginal select had aria-describedby, add to select2 search
     if (this.$element.attr('aria-describedby') !== undefined) {
-      this.$search.attr('aria-describedby', this.$element.attr('aria-describedby'));
+      this.$search
+        .attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
 
     return decorated.call(this, container);
@@ -2271,8 +2293,8 @@ S2.define('select2/a11y/a11yMulti',[
 
   A11yMulti.prototype.update = function (decorated, data) {
 
-    var existingAriaDescribedby = this.$element.attr('aria-describedby');
-    var updatedAriaDescribedby;
+    var oldAriaDescBy = this.$element.attr('aria-describedby');
+    var newAriaDescBy;
 
     // Empty the summary of previously selected options
     this.$selectionSummary.empty();
@@ -2288,27 +2310,28 @@ S2.define('select2/a11y/a11yMulti',[
         this.$selectionSummary.append(formatted.trim() + ',');
       }
 
-      if (formatted instanceof jQuery) {
+      if (formatted instanceof jQuery) { //jshint ignore:line
         this.$selectionSummary.append(formatted.text().trim() + ',');
       }
     }
 
     // Remove trailing comma if no element aria-describedby
-    if (existingAriaDescribedby === undefined) {
-      this.$selectionSummary.text(this.$selectionSummary.text().replace(/,$/, ''));
+    if (oldAriaDescBy === undefined) {
+      this.$selectionSummary
+        .text(this.$selectionSummary.text().replace(/,$/, ''));
     }
 
     // Update search field with selection summary aria-describedby
-    if (existingAriaDescribedby !== undefined) {
-      updatedAriaDescribedby = this.$selectionSummary.attr('id') + ' ' + existingAriaDescribedby;
+    if (oldAriaDescBy !== undefined) {
+      newAriaDescBy = this.$selectionSummary.attr('id') + ' ' + oldAriaDescBy;
     } else {
-      updatedAriaDescribedby = this.$selectionSummary.attr('id')
+      newAriaDescBy = this.$selectionSummary.attr('id');
     }
-    this.$search.attr('aria-describedby', updatedAriaDescribedby);
+    this.$search.attr('aria-describedby', newAriaDescBy);
 
 
     return decorated.call(this, data);
-  }
+  };
 
   return A11yMulti;
 });
@@ -5662,7 +5685,8 @@ S2.define('select2/core',[
     // Don't mess with the focus on touchscreens
     // because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
-      this.$results.find('li.select2-results__option--highlighted').trigger('focus');
+      this.$results.find('li.select2-results__option--highlighted')
+        .trigger('focus');
     }
   };
 
