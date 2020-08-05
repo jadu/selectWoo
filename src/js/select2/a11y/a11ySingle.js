@@ -10,7 +10,8 @@ define([
 
     // If orginal select had aria-describedby, add to select2-selection
     if (this.$element.attr('aria-describedby') !== undefined) {
-      this.$selection.attr('aria-describedby', this.$element.attr('aria-describedby'));
+      this.$selection
+        .attr('aria-describedby', this.$element.attr('aria-describedby'));
     }
 
     return decorated.call(this, data);

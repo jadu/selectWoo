@@ -34,20 +34,23 @@ define([
     var label = this.options.get('label');
     var placeholder = this.options.get('placeholder');
 
-    // If a label is passed via options,
-    // set aria label on select2-container for screen readers
-    if (label) {
-      this.container.$container.attr('aria-label', label);
-    }
-
     this.$selection.find('.select2-selection__rendered')
       .attr('id', id)
       .attr('role', 'textbox')
       .attr('aria-readonly', 'true');
 
-    // role="textbox" require a text label (not needed when no placeholder is present as first option is selected)
     if (placeholder) {
-      this.$selection.find('.select2-selection__rendered').attr('aria-label', placeholder);
+      // role="textbox" requires a text label 
+      // not needed when placeholder absent as first option is selected
+      this.$selection.find('.select2-selection__rendered')
+        .attr('aria-label', placeholder);
+
+      if (label) {
+        // role=combobox requires a label 
+        // we're adding the label and placeholder here 
+        // so they both get announced
+        this.$selection.attr('aria-label', label + ', ' + placeholder);
+      }
     }
 
     // If element is disabled, 
@@ -59,6 +62,7 @@ define([
 
     // This makes single selects work in screen readers.
     // ARIA 1.1 states combobox should also have aria-controls and aria-owns.
+    // https://www.w3.org/TR/wai-aria-1.1/#combobox
     this.$selection.attr('role', 'combobox');
     this.$selection.attr('aria-controls', id);
     this.$selection.attr('aria-owns', id);
@@ -129,8 +133,22 @@ define([
 
     $rendered.empty().append(formatted);
     
-    // Update aria-label with selected option
+    // Update aria-label with selected option (role="textbox" requires a label)
     $rendered.attr('aria-label', selection.title || selection.text);
+
+    var label = this.options.get('label');
+    var selectedValueText = selection.title || selection.text;
+    var placeholder = this.options.get('placeholder');
+
+    // selection has role="combobox" and therefore requires a label
+    // but adding just the label results in only the label being read 
+    // and not the selection/placeholder (in JAWS & NVDA) 
+    // so we add the label and the selection/placeholder
+    if (label) {
+      this.$selection.attr('aria-label', label + ', ' + selectedValueText);
+    } else {
+      this.$selection.attr('aria-label', selectedValueText);
+    }
   };
 
   return SingleSelection;

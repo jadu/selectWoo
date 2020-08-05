@@ -124,39 +124,3 @@ test('a custom tabindex is copied', function (assert) {
     'The tab index should be restored when re-enabled'
   );
 });
-
-module('Accessibility - Single');
-
-test('aria-labelledby should match the rendered container', function (assert) {
-  var $select = $('#qunit-fixture .single');
-
-  var selection = new SingleSelection($select, options);
-  var $selection = selection.render();
-
-  var container = new MockContainer();
-  selection.bind(container, $('<span></span>'));
-
-  var $rendered = $selection.find('.select2-selection__rendered');
-
-  assert.equal(
-    $selection.attr('aria-labelledby'),
-    $rendered.attr('id'),
-    'The rendered selection should label the container'
-  );
-});
-
-test('aria-role should be set', function (assert) {
-  var $select = $('#qunit-fixture .single');
-  var selection = new SingleSelection($select, options);
-  var $selection = selection.render();
-
-  var container = new MockContainer();
-  selection.bind(container, $('<span></span>'));
-
-  assert.equal($selection.attr('role'),
-    'combobox',
-    'The container should identify as a combobox'
-  );
-});
-
-module('Accessibility - Multiple');
